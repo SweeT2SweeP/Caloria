@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:77b065790ba9a96aec5c87121831c275c2c251fb227c47142613bd8136e0a9ee
-size 888
+﻿using System;
+using System.Collections;
+using UnityEngine.SceneManagement;
+
+namespace Infrastructure
+{
+    public class SceneLoader
+    {
+        private readonly ICoroutineRunner _coroutineRunner;
+
+        public SceneLoader(ICoroutineRunner coroutineRunner) => 
+            _coroutineRunner = coroutineRunner;
+
+        public void Load(string name, Action onLoaded = null) => 
+            _coroutineRunner.StartCoroutine(LoadScene(name, onLoaded));
+
+        private IEnumerator LoadScene(string nextScene, Action onLoaded = null)
+        {
+            if (SceneManager.GetActiveScene().name == nextScene)
+            {
+                onLoaded?.Invoke();
+                yield break;
+            }
+
+            var waitNextScene = SceneManager.LoadSceneAsync(nextScene);
+
+            while (!waitNextScene.isDone) yield return null;
+
+            onLoaded?.Invoke();
+        }
+    }
+}

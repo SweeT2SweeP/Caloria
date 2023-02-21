@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5202480f4a997ea3d29f3f7f366a26e8fc8854cb8cef03646ed2a8217b6e5619
-size 1018
+﻿using Infrastructure.Services.ServiceLocator;
+
+namespace Infrastructure.Services.States
+{
+    public class BootstrapState : IState
+    {
+        private const string InitialScene = "BootstrapScene";
+        
+        private readonly AppStateMachine _gameStateMachine;
+        private readonly SceneLoader _sceneLoader;
+        private readonly AllServices _services;
+
+        public BootstrapState(AppStateMachine gameStateMachine, SceneLoader sceneLoader, AllServices services)
+        {
+            _gameStateMachine = gameStateMachine;
+            _sceneLoader = sceneLoader;
+            _services = services;
+            
+            RegisterServices();
+        }
+
+        public void Enter()
+        {
+            _sceneLoader.Load(InitialScene, onLoaded: EnterLoadLevel);
+        }
+
+        public void Exit()
+        {
+        }
+
+        private void EnterLoadLevel() => 
+            _gameStateMachine.Enter<LoadLevelState>();
+
+        private void RegisterServices()
+        {
+            
+        }
+    }
+}

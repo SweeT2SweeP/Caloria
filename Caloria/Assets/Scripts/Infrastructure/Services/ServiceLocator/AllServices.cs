@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7365168ff6aa47aeb276d9c60188ac7f49c4670bca401eb13ff19054ba8f5be5
-size 673
+namespace Infrastructure.Services.ServiceLocator
+{
+    public class AllServices
+    {
+        private static AllServices _instance;
+        public static AllServices Container => _instance ??= new AllServices();
+
+        public void RegisterSingle<TService>(TService implementation) where TService : IService => 
+            Implementation<TService>.ServiceInstance = implementation;
+
+        public TService Single<TService>() where TService : IService => 
+            Implementation<TService>.ServiceInstance;
+
+        private static class Implementation<TService> where TService : IService
+        {
+            public static TService ServiceInstance;
+        }
+    }
+}
