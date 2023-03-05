@@ -33,7 +33,9 @@ namespace Infrastructure.Services.States
 
         private void RegisterServices()
         {
-            
+            AllServices.Container.RegisterSingle<IPrefs>(new Prefs());
+            AllServices.Container.RegisterSingle<IAppDataChanger>(
+                new AppDataChanger(AllServices.Container.Single<IPrefs>()));
         }
     }
 }
