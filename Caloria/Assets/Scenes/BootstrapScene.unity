@@ -438,6 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f94b645ad145988db61710afa26743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDataReset: 0
   _curtainPrefab: {fileID: 1614681390}
 --- !u!4 &928768176
 Transform:

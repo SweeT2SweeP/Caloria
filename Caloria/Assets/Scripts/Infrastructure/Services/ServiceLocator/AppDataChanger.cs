@@ -12,6 +12,8 @@ namespace Infrastructure.Services.ServiceLocator
 
         private IPrefs _prefs;
 
+        public event Action DataUpdated;
+
         public FoodDataCollection FoodData { get; private set; }
 
         public DayData CurrentDayData { get; private set; }
@@ -33,6 +35,8 @@ namespace Infrastructure.Services.ServiceLocator
 
         public void ChangeTotalCaloriesValue(int newValue)
         {
+            if (CurrentDayData.TotalCalories == newValue) return;
+            
             CurrentDayData.TotalCalories = newValue;
             
             SaveDayData();
@@ -40,6 +44,8 @@ namespace Infrastructure.Services.ServiceLocator
 
         public void ChangeExercisesCalories(int newValue)
         {
+            if (CurrentDayData.ExerciesColories == newValue) return;
+            
             CurrentDayData.ExerciesColories = newValue;
             
             SaveDayData();
@@ -47,6 +53,8 @@ namespace Infrastructure.Services.ServiceLocator
 
         public void ChangeStepsCalories(int newValue)
         {
+            if (CurrentDayData.StepsCalories == newValue) return;
+            
             CurrentDayData.StepsCalories = newValue;
             
             SaveDayData();
@@ -68,9 +76,11 @@ namespace Infrastructure.Services.ServiceLocator
             if (CurrentDayData.CurrentDay.Day == DateTime.Now.Day) return;
             
             CurrentDayData.CurrentDay = DateTime.Now;
-            CurrentDayData.DayFoodData = new List<FoodDataCollection>();
+            CurrentDayData.DayFoodData = new FoodDataCollection { Data = new List<FoodData>() };
             CurrentDayData.ExerciesColories = 0;
             CurrentDayData.StepsCalories = 0;
+            
+            SaveDayData();
         }
 
         private bool TryToSaveNewDayData(string value)
@@ -83,7 +93,7 @@ namespace Infrastructure.Services.ServiceLocator
                 TotalCalories = 1500,
                 StepsCalories = 0,
                 ExerciesColories = 0,
-                DayFoodData = new List<FoodDataCollection>()
+                DayFoodData = new FoodDataCollection {Data = new List<FoodData>()}
             };
 
             SaveDayData();
@@ -117,7 +127,10 @@ namespace Infrastructure.Services.ServiceLocator
         private void SaveFoodData() => 
             _prefs.SavePref(FoodDataKey, JsonUtility.ToJson(FoodData));
         
-        private void SaveDayData() => 
+        private void SaveDayData()
+        {
             _prefs.SavePref(DayDataKey, JsonUtility.ToJson(CurrentDayData));
+            DataUpdated?.Invoke();
+        }
     }
 }

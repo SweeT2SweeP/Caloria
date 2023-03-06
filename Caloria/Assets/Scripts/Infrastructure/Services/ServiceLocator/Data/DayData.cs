@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Infrastructure.Services.ServiceLocator.Data
 {
     [Serializable]
     public class DayData
     {
-        public DateTime CurrentDay;
+        public string CurrentDayStringValue;
         public int TotalCalories;
         public int StepsCalories;
         public int ExerciesColories;
-        public List<FoodDataCollection> DayFoodData;
+        public FoodDataCollection DayFoodData;
+
+        public DateTime CurrentDay
+        {
+            get => DateTime.Parse(CurrentDayStringValue);
+            set => CurrentDayStringValue = value.ToString(CultureInfo.InvariantCulture);
+        }
     }
 }
