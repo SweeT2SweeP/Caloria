@@ -11,7 +11,7 @@ namespace Infrastructure.Services.ServiceLocator.Data
         public int TotalCalories;
         public int StepsCalories;
         public int ExerciesColories;
-        public FoodDataCollection DayFoodData;
+        public EatenFoodCollection DayFoodData;
 
         public DateTime CurrentDay
         {

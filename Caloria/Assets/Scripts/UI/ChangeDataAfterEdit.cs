@@ -74,14 +74,21 @@ namespace UI
 
         private void UpdateTotalCaloriesInputField()
         {
-            var eatenFoodCalories = _appDataChanger.CurrentDayData.DayFoodData.Data
-                .Select(s => s.FoodCalories)
+            var sumOfCalories = _appDataChanger.CurrentDayData.DayFoodData.Data
+                .Select(eatenFood => new
+                {
+                    eatenFood,
+                    foodData = _appDataChanger.FoodData.Data
+                        .FirstOrDefault(s => s.FoodName == eatenFood.FoodName)
+                })
+                .Where(t => t.foodData != null)
+                .Select(t => t.eatenFood.FoodWeight * t.foodData.FoodCalories / 100)
                 .Sum();
 
             var value = _appDataChanger.CurrentDayData.TotalCalories
                         + _appDataChanger.CurrentDayData.StepsCalories
                         + _appDataChanger.CurrentDayData.ExerciesColories
-                        - eatenFoodCalories;
+                        - sumOfCalories;
 
             _inputField.text = value < _appDataChanger.CurrentDayData.TotalCalories
                 ? value.ToString()

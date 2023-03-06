@@ -9,6 +9,7 @@ namespace Infrastructure.Services.ServiceLocator
         FoodDataCollection FoodData { get; }
         DayData CurrentDayData { get; }
         void AddNewFoodData(FoodData foodData);
+        void AddEatenFood(EatenFood foodData);
         void ChangeTotalCaloriesValue(int newValue);
         void ChangeExercisesCalories(int newValue);
         void ChangeStepsCalories(int newValue);

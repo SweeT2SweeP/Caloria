@@ -33,6 +33,13 @@ namespace Infrastructure.Services.ServiceLocator
             SaveFoodData();
         }
 
+        public void AddEatenFood(EatenFood foodData)
+        {
+            CurrentDayData.DayFoodData.Data.Add(foodData);
+            
+            SaveDayData();
+        }
+
         public void ChangeTotalCaloriesValue(int newValue)
         {
             if (CurrentDayData.TotalCalories == newValue) return;
@@ -76,7 +83,7 @@ namespace Infrastructure.Services.ServiceLocator
             if (CurrentDayData.CurrentDay.Day == DateTime.Now.Day) return;
             
             CurrentDayData.CurrentDay = DateTime.Now;
-            CurrentDayData.DayFoodData = new FoodDataCollection { Data = new List<FoodData>() };
+            CurrentDayData.DayFoodData = new EatenFoodCollection { Data = new List<EatenFood>() };
             CurrentDayData.ExerciesColories = 0;
             CurrentDayData.StepsCalories = 0;
             
@@ -93,7 +100,7 @@ namespace Infrastructure.Services.ServiceLocator
                 TotalCalories = 1500,
                 StepsCalories = 0,
                 ExerciesColories = 0,
-                DayFoodData = new FoodDataCollection {Data = new List<FoodData>()}
+                DayFoodData = new EatenFoodCollection { Data = new List<EatenFood>() }
             };
 
             SaveDayData();
